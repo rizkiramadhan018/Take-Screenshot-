@@ -3,47 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Information Viewer</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>Website Screenshot</title>
     <style>
         body {
-            background-color: #f7f7f7;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            font-family: Arial, sans-serif;
+            margin: 20px;
         }
-        .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 800px;
-            width: 100%;
-            text-align: center;
+        input[type="text"] {
+            width: 300px;
+            padding: 10px;
+            margin-bottom: 10px;
         }
-        .web-info {
-            margin-top: 20px;
+        button {
+            padding: 10px 20px;
         }
         img {
+            margin-top: 20px;
             max-width: 100%;
-            margin-top: 10px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1 class="text-center">Web Information Viewer</h1>
-        <form id="url-form">
-            <div class="form-group">
-                <label for="url-input">Enter URL:</label>
-                <input type="url" class="form-control" id="url-input" placeholder="Enter URL" required>
-            </div>
-            <button type="submit" class="btn btn-primary btn-block">Get Information</button>
-        </form>
-        <div id="web-info" class="web-info"></div>
-    </div>
+    <h1>Website Screenshot</h1>
+    <input type="text" id="url" placeholder="Enter website URL">
+    <button onclick="takeScreenshot()">Take Screenshot</button>
+    <img id="screenshot" src="" alt="Screenshot will appear here">
 
-    <script src="script.js"></script>
+    <script>
+        async function takeScreenshot() {
+            const url = document.getElementById('url').value;
+            const apiKey = 'HWta0YdJ65mbiSIL5u0h7277g9CevGRa';
+            const apiUrl = `https://api.apilayer.com/screenshot?url=${encodeURIComponent(url)}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    headers: {
+                        'apikey': apiKey
+                    }
+                });
+
+                if (response.ok) {
+                    const imageUrl = await response.text();
+                    document.getElementById('screenshot').src = imageUrl;
+                } else {
+                    alert('Failed to take screenshot');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while taking screenshot');
+            }
+        }
+    </script>
 </body>
 </html>
